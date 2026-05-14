@@ -1,5 +1,5 @@
 ---
-title: Technical Documentation
+title: Welcome to Cocoon
 ---
 
 This documentation provides a deep technical description of the COCOON decentralized AI inference platform.
