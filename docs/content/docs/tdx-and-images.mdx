@@ -29,11 +29,13 @@ This solves the problem of running untrusted code on someone else's server.
 When a TDX VM boots, Intel hardware measures everything loaded into it:
 
 ### MRTD (Measurement Register for TD)
+
 - Hash of firmware code (TDVF — TDX Virtual Firmware)
 - Hash of initial page tables
 - Set during VM construction, never changes after boot
 
 ### RTMR[0-3] (Runtime Measurement Registers)
+
 - **RTMR[0]:** Firmware data (configuration tables, ACPI, etc.)
 - **RTMR[1]:** Linux kernel hash (including EFI stub)
 - **RTMR[2]:** Initrd hash + kernel boot parameters
@@ -62,6 +64,7 @@ COCOON workers run from reproducible, verifiable images:
 </Files>
 
 **Goals:**
+
 - **Reproducible:** Same source → same image hash
 - **Verifiable:** Anyone can rebuild and verify
 - **Immutable:** Rootfs cannot be modified (dm-verity)
@@ -74,6 +77,7 @@ We use **mkosi** with **Debian** for reproducible builds. The build process is d
 To build: run `mkosi build` in the `reprodebian/` directory. This generates all image components (firmware, kernel, initrd, rootfs) with deterministic hashes.
 
 **Why mkosi + Debian?**
+
 - **mkosi:** Modern tool for building reproducible OS images, supports TDX/confidential VMs
 - **Debian:** Strong reproducible builds infrastructure via reproducible-builds.org
 - Deterministic package selection and build process
@@ -128,6 +132,7 @@ The initialization script ([`reprodebian/cocoon-init/cocoon-init`](https://githu
 8. **Start application services** by executing the startup script from config
 
 After this initialization:
+
 - Base image is verified (measured in MRTD, RTMR[0-2])
 - Config is verified (measured in RTMR[3])
 - TLS certificate contains proof of exact VM state
@@ -139,6 +144,7 @@ After this initialization:
 ### Static vs Runtime Config
 
 **Static Config** (measured into RTMR[3]):
+
 <Files>
   <Folder name="/spec" defaultOpen>
     <File name="worker-config.json" description="Worker settings" />
@@ -151,6 +157,7 @@ After this initialization:
 Config hash is part of TDX measurements → different config = different attestation.
 
 **Runtime Config** (not measured):
+
 <Files>
   <Folder name="/spec/runtime" defaultOpen>
     <File
@@ -167,6 +174,7 @@ Config hash is part of TDX measurements → different config = different attesta
 Not part of measurements, but cannot affect security or correctness.
 
 **Why separate?**
+
 - Runtime parameters change frequently (e.g., liteserver endpoints)
 - Correctness of computation is not affected
 - Templates are verified (in static config), only values vary
@@ -200,6 +208,7 @@ Quote verification uses Intel's DCAP libraries to verify the CPU signature and e
 Verification requires "collaterals" (certificates, CRLs, TCB info) from Intel. Intel's rules require using PCCS (Provisioning Certificate Caching Service) to fetch these.
 
 **Two key points:**
+
 1. **Must use PCCS** — Intel requires collaterals to be fetched via PCCS (local cache), not directly
 2. **Untrusted PCCS is fine** — We embed Intel's root key in our code, so PCCS cannot forge attestations (only cache and serve collaterals)
 
@@ -216,6 +225,7 @@ Workers use encrypted storage for persistent data (wallet keys, state, etc.):
 **Key derivation:** The persistent key depends on the TDX measurements (MRTD + RTMRs), making it unique to the specific image and config combination.
 
 **Security properties:**
+
 - **Config isolation:** Different config → different key (malicious config can't access good config's data)
 - **Host cannot decrypt:** Key only exists in TDX memory, the encrypted volume is opaque to the host
 - **Hardware-bound:** Key cannot be exported or backed up (tied to CPU)
@@ -231,6 +241,7 @@ TDX provides hardware-enforced isolation and cryptographic proof of what code is
 - **Verifiable:** Anyone can rebuild the image and verify that measurements match
 
 **Limitations:**
+
 - Host can provide old snapshots (rollback attacks)
 - Runtime directory is not measured (only use it for non-security-critical data)
 - We trust Intel TDX hardware, Intel's attestation infrastructure, and Debian build tools

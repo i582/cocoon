@@ -17,30 +17,29 @@ TDX guests need persistent keys that:
 
 ## Architecture
 
-```
-TDX Guest (Worker)          Host                SGX Enclave
-      |                      |                        |
-      | 1. Generate EC P-256 keypair                 |
-      |                      |                        |
-      | 2. Get TDX report (reportdata = SHA256(pubkey))
-      |                      |                        |
-      | 3. getPersistentKey(tdx_report, pubkey)      |
-      |--------------------->|                        |
-      |                      | 4. ecall_gen_key()    |
-      |                      |----------------------->|
-      |                      |                        | 5. Verify tdx_report (local MAC)
-      |                      |                        | 6. Derive key from sealing_key + tee_info
-      |                      |                        | 7. Encrypt key with pubkey (ECDH)
-      |                      |                        | 8. Generate SGX quote
-      |                      |                        |
-      |                      | 9. encrypted_key, sgx_quote
-      |                      |<-----------------------|
-      | 10. persistentKey(sgx_quote, encrypted_key)  |
-      |<---------------------|                        |
-      | 11. Verify SGX quote                          |
-      | 12. Decrypt key (ECDH)                        |
-      | 13. Use key for encrypted storage             |
-```
+<Mermaid
+  chart={`
+sequenceDiagram
+    participant TDX as TDX Guest (Worker)
+    participant Host as Host
+    participant SGX as SGX Enclave
+
+    Note over TDX: 1. Generate EC P-256 keypair
+    Note over TDX: 2. Get TDX report<br/>reportdata = SHA256(pubkey)
+    TDX->>Host: 3. getPersistentKey(tdx_report, pubkey)
+    Host->>SGX: 4. ecall_gen_key()
+    Note over SGX: 5. Verify tdx_report (local MAC)
+    Note over SGX: 6. Derive key from sealing_key + tee_info
+    Note over SGX: 7. Encrypt key with pubkey (ECDH)
+    Note over SGX: 8. Generate SGX quote
+    SGX-->>Host: 9. encrypted_key, sgx_quote
+    Host-->>TDX: 10. persistentKey(sgx_quote, encrypted_key)
+    Note over TDX: 11. Verify SGX quote
+    Note over TDX: 12. Decrypt key (ECDH)
+    Note over TDX: 13. Use key for encrypted storage
+
+`}
+/>
 
 ## Protocol Specification
 
@@ -63,12 +62,14 @@ persistentKey#163a179a sgx_quote:bytes encrypted_secret:bytes = PersistentKey;
 ### Message Format
 
 **Request (`getPersistentKey`):**
+
 - `tdx_report` — TDX report structure (`sgx_report2_t`, 1024 bytes)
   - reportdata = `SHA256(public_key) || 32 zero bytes`
 - `public_key` — EC P-256 public key (64 bytes, X||Y coordinates in little-endian)
 - `key_name` — String identifying key purpose (e.g., "worker-wallet")
 
 **Response (`persistentKey`):**
+
 - `sgx_quote` — SGX quote from Intel QE (Quoting Enclave)
   - reportdata = `SHA256(public_key) || SHA256(encrypted_secret)`
 - `encrypted_secret` — 96 bytes total:
@@ -117,10 +118,12 @@ Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/bl
 #### 3.2. Derive Persistent Key
 
 1. Get SGX sealing key with policy `SGX_KEYPOLICY_MRENCLAVE`
+
    - Sealing key is unique to this enclave's code hash
    - Changes if enclave code changes
 
 2. Combine sealing key with TDX measurements:
+
    ```
    persistent_key = SHA256(
      sealing_key ||          # 16 bytes - SGX enclave identity
@@ -147,6 +150,7 @@ Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/bl
 #### 3.4. Generate SGX Report
 
 Create SGX report with reportdata binding this exchange:
+
 - First 32 bytes: `SHA256(client_public)` — proves we're responding to this specific request
 - Next 32 bytes: `SHA256(encrypted_secret)` — proves integrity of encrypted data
 
@@ -166,6 +170,7 @@ Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoo
 #### 4.2. Verify Report Data
 
 Check SGX quote's reportdata = `SHA256(client_public) || SHA256(encrypted_secret)`:
+
 - First part proves this response is for our request (not replayed)
 - Second part proves encrypted_secret integrity (not tampered)
 
@@ -198,11 +203,13 @@ The persistent key depends on:
 **Answer:** TDX report MAC verification (`sgx_verify_report2`).
 
 The TDX report contains a MAC computed with a platform-specific key (REPORT_KEY) that:
+
 1. Never leaves the CPU
 2. Derived from CPU's hardware fuses
 3. Only knowable by the same physical CPU
 
 When SGX successfully verifies the TDX report MAC, it proves:
+
 - TDX and SGX are on the same physical CPU
 - TDX report is authentic (not forged)
 - No network communication needed (local verification)
@@ -262,6 +269,7 @@ Called by [`reprodebian/cocoon-init/cocoon-init`](https://github.com/TelegramMes
 ### TDX Report (Not Quote)
 
 We use TDX report (not quote) in the request because:
+
 - Contains MAC verifiable locally by SGX (no network needed)
 - Fast generation (~1ms vs ~50ms for quote)
 - SGX can verify with `sgx_verify_report2()`
