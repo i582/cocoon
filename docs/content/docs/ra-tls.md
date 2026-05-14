@@ -1,4 +1,6 @@
-# RA-TLS (Remote Attestation over TLS)
+---
+title: RA-TLS (Remote Attestation over TLS)
+---
 
 ## Overview
 
@@ -19,7 +21,7 @@ Both parties present RA-TLS certificates and verify each other during the TLS ha
 
 ## Certificate Format
 
-Implementation in [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - function `generate_tdx_self_signed_cert`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `generate_tdx_self_signed_cert`.
 
 ### Structure
 
@@ -55,7 +57,7 @@ Both extensions are marked as **critical** so non-aware TLS implementations will
 
 ### User Claims
 
-Currently minimal (see [`tee/cocoon/tdx.h`](../tee/cocoon/tdx.h) and [`tdx.cpp`](../tee/cocoon/tdx.cpp)):
+Currently minimal (see [`tee/cocoon/tdx.h`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.h) and [`tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp)):
 
 ```
 struct UserClaims {
@@ -82,7 +84,7 @@ Implementation in `generate_tdx_self_signed_cert` enforces that `user_claims.pub
 
 ### Using `gen-cert` Tool
 
-See [`tee/cocoon/gen-cert.cpp`](../tee/cocoon/gen-cert.cpp):
+See [`tee/cocoon/gen-cert.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/gen-cert.cpp):
 
 ```bash
 # No attestation (development)
@@ -102,7 +104,7 @@ Outputs:
 
 ## Certificate Verification
 
-Implementation in [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - struct `Verifier`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - struct `Verifier`.
 
 During TLS handshake, the custom verify callback performs the following checks:
 
@@ -143,7 +145,7 @@ If all checks pass → connection allowed.
 
 ## Policy System
 
-Implementation in [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - struct `DefaultPolicy`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - struct `DefaultPolicy`.
 
 ### Built-in Policies
 
@@ -164,7 +166,7 @@ Empty lists mean "allow any" for that field.
 
 ### Policy Validation
 
-See [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - function `DefaultPolicy::validate_tdx_attestation`. Policy checks:
+See [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `DefaultPolicy::validate_tdx_attestation`. Policy checks:
 
 1. **Reportdata matches user claims** - Verify `attestation.reportdata == SHA-512(user_claims)`
 2. **MRTD in allowlist** - Check firmware measurement (if policy specifies)
@@ -176,7 +178,7 @@ All checks must pass for validation to succeed.
 
 ## Image Hash Calculation
 
-Implementation in [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - function `AttestationData::image_hash`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `AttestationData::image_hash`.
 
 Image hash is SHA-256 of attestation data (MRTD + RTMRs + other measurements), **excluding reportdata**.
 
@@ -189,7 +191,7 @@ This hash is used in policy validation and stored in the root contract.
 
 ## Using `router`
 
-The `router` tool ([`tee/cocoon`](../tee/cocoon)) provides transparent RA-TLS proxying. See [README](../tee/cocoon/README.md) for detailed usage.
+The `router` tool ([`tee/cocoon`](https://github.com/TelegramMessenger/cocoon/tree/master/tee/cocoon)) provides transparent RA-TLS proxying. See [README](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/README.md) for detailed usage.
 
 ### SOCKS5 Proxy
 
@@ -225,7 +227,7 @@ Or use JSON config file. See `router --generate-config` for examples.
 
 ## TLS Configuration
 
-Implementation in [`tee/cocoon/tdx.cpp`](../tee/cocoon/tdx.cpp) - function `create_ssl_ctx`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `create_ssl_ctx`.
 
 ### Protocol and Ciphers
 
@@ -284,7 +286,7 @@ Quote verification requires "collaterals" from Intel via PCCS (Provisioning Cert
 
 **How it works:**
 
-During quote verification (`RealTdxInterface::validate_quote`), we extract the Intel root key ID from the verification result. Our policy checks this ID against an embedded whitelist of known Intel root keys (see default value in [`router.cpp`](../tee/cocoon/router.cpp)).
+During quote verification (`RealTdxInterface::validate_quote`), we extract the Intel root key ID from the verification result. Our policy checks this ID against an embedded whitelist of known Intel root keys (see default value in [`router.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/router.cpp)).
 
 This prevents:
 - Fake PCCS providing collaterals signed by compromised/fake root certificates
@@ -317,5 +319,5 @@ This provides sufficient freshness guarantees without regenerating quotes per co
 
 - For TDX fundamentals: [TDX and Images](tdx-and-images.md)
 - For persistent keys: [Seal Keys](seal-keys.md)
-- For router usage details: [README](../tee/cocoon/README.md)
+- For router usage details: [README](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/README.md)
 - For deployment: [Deployment](deployment.md)

@@ -1,4 +1,6 @@
-# TDX and Guest Images
+---
+title: TDX and Guest Images
+---
 
 ## What is Intel TDX?
 
@@ -62,7 +64,7 @@ Image Components:
 
 ### Image Generation
 
-We use **mkosi** with **Debian** for reproducible builds. The build process is defined in [`reprodebian/mkosi.conf`](../reprodebian/mkosi.conf) and related configuration files.
+We use **mkosi** with **Debian** for reproducible builds. The build process is defined in [`reprodebian/mkosi.conf`](https://github.com/TelegramMessenger/cocoon/blob/master/reprodebian/mkosi.conf) and related configuration files.
 
 To build: run `mkosi build` in the `reprodebian/` directory. This generates all image components (firmware, kernel, initrd, rootfs) with deterministic hashes.
 
@@ -76,7 +78,7 @@ To build: run `mkosi build` in the `reprodebian/` directory. This generates all 
 
 ### 1. QEMU Initialization
 
-QEMU starts the TDX VM with the following key components (see [`scripts/cocoon-launch`](../scripts/cocoon-launch) for full setup):
+QEMU starts the TDX VM with the following key components (see [`scripts/cocoon-launch`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/cocoon-launch) for full setup):
 
 - **Machine type:** q35 with TDX confidential guest support enabled
 - **Firmware (BIOS):** OVMF.fd with TDX support → measured into MRTD
@@ -109,7 +111,7 @@ The initrd is built by mkosi and includes minimal utilities needed for this setu
 
 ### 4. COCOON Initialization (`cocoon-init`)
 
-The initialization script ([`reprodebian/cocoon-init/cocoon-init`](../reprodebian/cocoon-init/cocoon-init)) runs as the first service and performs the following steps:
+The initialization script ([`reprodebian/cocoon-init/cocoon-init`](https://github.com/TelegramMessenger/cocoon/blob/master/reprodebian/cocoon-init/cocoon-init)) runs as the first service and performs the following steps:
 
 1. **Mount config volume** from host via virtfs (9p filesystem)
 2. **Copy static config** to `/spec/`, excluding runtime directory

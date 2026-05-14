@@ -1,4 +1,6 @@
-# Smart Contracts and Payment System
+---
+title: Smart Contracts and Payment System
+---
 
 ## Overview
 

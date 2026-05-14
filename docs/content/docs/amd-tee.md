@@ -1,4 +1,6 @@
-# AMD TEE
+---
+title: AMD TEE
+---
 
 Trusted Execution Environment on AMD processors is feasible by a set of related
 technologies: SEV, SEV-ES, SEV-SNP - [1]. The whole concept is similar to Intel

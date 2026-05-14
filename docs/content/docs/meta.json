@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "welcome.md",
+    "architecture.md",
+    "tdx-and-images.md",
+    "amd-tee.md",
+    "ra-tls.md",
+    "seal-keys.md",
+    "smart-contracts.md",
+    "gpu.md",
+    "deployment.md"
+  ]
+}

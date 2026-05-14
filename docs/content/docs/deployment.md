@@ -1,4 +1,6 @@
-# Deployment and Testing
+---
+title: Deployment and Testing
+---
 
 ## Prerequisites
 
@@ -26,11 +28,11 @@ dmesg | grep -i tdx
 ```
 
 **Setup GPU:**
-- Use [`scripts/setup-gpu-vfio`](../scripts/setup-gpu-vfio) to configure GPU for passthrough
+- Use [`scripts/setup-gpu-vfio`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/setup-gpu-vfio) to configure GPU for passthrough
 
 ## Quick Start
 
-If you want just to run a worker, please see [readme](../README.md). The following instructions are mostly for developers.
+If you want just to run a worker, please see the [repository README](https://github.com/TelegramMessenger/cocoon/blob/master/README.md). The following instructions are mostly for developers.
 
 ## Building from Source
 

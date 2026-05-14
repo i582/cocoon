@@ -1,4 +1,6 @@
-# COCOON Architecture
+---
+title: Architecture
+---
 
 ## Overview
 
@@ -142,4 +144,3 @@ Workers connect to proxies. Proxies track worker reputation and load-balance req
 - For TDX details: [TDX and Images](tdx-and-images.md)
 - For network protocol: [RA-TLS](ra-tls.md)
 - For payment system: [Smart Contracts](smart-contracts.md)
-

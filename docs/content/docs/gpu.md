@@ -1,4 +1,6 @@
-# GPU Confidential Computing
+---
+title: GPU Confidential Computing
+---
 
 ## Overview
 
@@ -44,7 +46,7 @@ VFIO (Virtual Function I/O) allows TDX guest to access GPU hardware directly:
 
 ### Host Setup
 
-Use [`scripts/setup-gpu-vfio`](../scripts/setup-gpu-vfio) script:
+Use [`scripts/setup-gpu-vfio`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/setup-gpu-vfio) script:
 
 ```bash
 # List GPUs
@@ -67,7 +69,7 @@ The script:
 
 ### QEMU Configuration
 
-See [`scripts/cocoon-launch`](../scripts/cocoon-launch) for full QEMU setup.
+See [`scripts/cocoon-launch`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/cocoon-launch) for full QEMU setup.
 
 GPU passed to guest via: `-device vfio-pci,host=<pci-address>`
 
@@ -89,7 +91,7 @@ NVIDIA GPUs with CC support can generate hardware attestations similar to TDX:
 
 ### Verification at Boot
 
-Implementation: [`reprodebian/gpu_attest/gpu_attest.py`](../reprodebian/gpu_attest/gpu_attest.py)
+Implementation: [`reprodebian/gpu_attest/gpu_attest.py`](https://github.com/TelegramMessenger/cocoon/blob/master/reprodebian/gpu_attest/gpu_attest.py)
 
 During TDX guest boot (via systemd service `nvidia-tdx.service`, runs before `cocoon-init`):
 
@@ -100,7 +102,7 @@ During TDX guest boot (via systemd service `nvidia-tdx.service`, runs before `co
 
 If verification fails → guest boot fails (prevents running without valid GPU).
 
-**Policy:** See [`reprodebian/gpu_attest/attest_policy.json`](../reprodebian/gpu_attest/attest_policy.json)
+**Policy:** See [`reprodebian/gpu_attest/attest_policy.json`](https://github.com/TelegramMessenger/cocoon/blob/master/reprodebian/gpu_attest/attest_policy.json)
 
 Checks include:
 - GPU architecture matches
@@ -131,7 +133,7 @@ Client needs to verify that the worker uses the correct model (not a cheaper/dif
 
 **Solution:**
 
-Models are built using [`scripts/build-model`](../scripts/build-model):
+Models are built using [`scripts/build-model`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/build-model):
 
 ```bash
 # Build model with automatic hash
