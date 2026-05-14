@@ -7,8 +7,10 @@ const docsRoot = fileURLToPath(new URL(".", import.meta.url))
 const isGitHubPagesBuild =
   process.env.GITHUB_ACTIONS === "true" || process.env.GITHUB_PAGES === "true"
 
-const repoUrl = "https://telegrammessenger.github.io"
-const repoName = "cocoon"
+const repository = process.env.GITHUB_REPOSITORY
+const [repositoryOwner = "i582", repositoryName = "cocoon"] = repository?.split("/") ?? []
+const repoUrl = `https://${repositoryOwner}.github.io`
+const repoName = repositoryName
 
 function resolveBaseUrl() {
   const publicUrl = process.env.NEXT_PUBLIC_SITE_URL
