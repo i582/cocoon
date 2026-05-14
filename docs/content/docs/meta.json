@@ -2,12 +2,12 @@
   "pages": [
     "welcome.md",
     "--- Overview ---",
-    "overview.mdx",
     "developers.mdx",
     "gpu-owners.mdx",
     "architecture-overview.mdx",
     "downloads.mdx",
     "--- Technical Docs ---",
+    "overview.mdx",
     "architecture.md",
     "tdx-and-images.mdx",
     "amd-tee.md",

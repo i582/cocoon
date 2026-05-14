@@ -9,7 +9,9 @@ import {
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { getMDXComponents } from "@/lib/mdx-components";
 import type { Metadata } from "next";
-import { baseUrl } from "@/lib/metadata";
+import { baseUrl, githubRepoUrl } from "@/lib/metadata";
+import { getLLMText } from "@/lib/get-llm-text";
+import { PageActions } from "@/components/page-actions";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -24,6 +26,7 @@ export default async function Page(props: PageProps) {
   }
 
   const { body: MDX, lastModified } = page.data;
+  const llmText = getLLMText(page);
 
   return (
     <DocsPage
@@ -39,6 +42,10 @@ export default async function Page(props: PageProps) {
           {page.data.description}
         </DocsDescription>
       ) : null}
+      <PageActions
+        content={llmText}
+        githubUrl={`${githubRepoUrl}/blob/master/docs/content/docs/${page.path}`}
+      />
       <DocsBody>
         <MDX
           components={getMDXComponents({

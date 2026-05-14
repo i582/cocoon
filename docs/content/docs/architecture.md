@@ -1,5 +1,6 @@
 ---
 title: Architecture
+description: Detailed COCOON system architecture covering clients, proxies, workers, trust boundaries, and request flow.
 ---
 
 ## Overview

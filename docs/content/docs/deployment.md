@@ -1,5 +1,6 @@
 ---
 title: Deployment and Testing
+description: Deployment prerequisites, launch flow, testing steps, and operational checks for COCOON workers.
 ---
 
 ## Prerequisites

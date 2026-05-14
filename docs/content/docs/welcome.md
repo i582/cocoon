@@ -1,5 +1,6 @@
 ---
 title: Welcome to Cocoon
+description: "Start here for the COCOON docs: overview pages, technical guides, and suggested reading paths by role."
 ---
 
 COCOON is a confidential AI inference network on TON. This documentation is split into a public overview layer and a deeper technical layer, so you can either get oriented quickly or go straight into implementation details.

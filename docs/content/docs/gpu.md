@@ -1,5 +1,6 @@
 ---
 title: GPU Confidential Computing
+description: GPU passthrough, attestation, and model validation requirements for confidential AI inference in COCOON.
 ---
 
 ## Overview

@@ -1,5 +1,6 @@
 ---
 title: Smart Contracts and Payment System
+description: TON smart-contract architecture for worker registration, settlement, reputation, and registry management in COCOON.
 ---
 
 ## Overview

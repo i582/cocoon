@@ -1,5 +1,6 @@
 ---
 title: AMD TEE
+description: AMD SEV-SNP host preparation notes and operational differences from the Intel TDX-based flow.
 ---
 
 Trusted Execution Environment on AMD processors is feasible by a set of related

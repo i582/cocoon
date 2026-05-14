@@ -1,5 +1,6 @@
 ---
 title: RA-TLS (Remote Attestation over TLS)
+description: How COCOON embeds attestation evidence into TLS certificates for mutual verification between components.
 ---
 
 ## Overview
