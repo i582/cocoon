@@ -2,7 +2,7 @@
   "pages": [
     "welcome.md",
     "architecture.md",
-    "tdx-and-images.md",
+    "tdx-and-images.mdx",
     "amd-tee.md",
     "ra-tls.md",
     "seal-keys.md",

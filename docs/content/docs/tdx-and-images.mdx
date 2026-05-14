@@ -47,14 +47,19 @@ When a TDX VM boots, Intel hardware measures everything loaded into it:
 
 COCOON workers run from reproducible, verifiable images:
 
-```
-Image Components:
-├── OVMF.fd        - TDX-enabled UEFI firmware (→ MRTD)
-├── vmlinuz        - Linux kernel (→ RTMR[1])
-├── initrd         - Initial ramdisk (→ RTMR[2])
-├── cmdline        - Kernel boot parameters, includes rootfs hash (→ RTMR[2])
-└── rootfs.img     - Root filesystem (read-only, dm-verity protected)
-```
+<Files>
+  <File name="OVMF.fd" description="TDX-enabled UEFI firmware (→ MRTD)" />
+  <File name="vmlinuz" description="Linux kernel (→ RTMR[1])" />
+  <File name="initrd" description="Initial ramdisk (→ RTMR[2])" />
+  <File
+    name="cmdline"
+    description="Kernel boot parameters, includes rootfs hash (→ RTMR[2])"
+  />
+  <File
+    name="rootfs.img"
+    description="Root filesystem (read-only, dm-verity protected)"
+  />
+</Files>
 
 **Goals:**
 - **Reproducible:** Same source → same image hash
@@ -134,22 +139,30 @@ After this initialization:
 ### Static vs Runtime Config
 
 **Static Config** (measured into RTMR[3]):
-```
-/spec/
-├── worker-config.json    # Worker settings
-├── init-engines.sh       # Startup script
-├── .gitignore           # Files to exclude from hash
-└── runtime/             # Not measured (see below)
-```
+<Files>
+  <Folder name="/spec" defaultOpen>
+    <File name="worker-config.json" description="Worker settings" />
+    <File name="init-engines.sh" description="Startup script" />
+    <File name=".gitignore" description="Files to exclude from hash" />
+    <Folder name="runtime" description="Not measured (see below)" />
+  </Folder>
+</Files>
 
 Config hash is part of TDX measurements → different config = different attestation.
 
 **Runtime Config** (not measured):
-```
-/spec/runtime/
-├── runtime.vars          # Runtime variables for config templates
-└── global.config.json    # TON config with liteserver endpoints
-```
+<Files>
+  <Folder name="/spec/runtime" defaultOpen>
+    <File
+      name="runtime.vars"
+      description="Runtime variables for config templates"
+    />
+    <File
+      name="global.config.json"
+      description="TON config with liteserver endpoints"
+    />
+  </Folder>
+</Files>
 
 Not part of measurements, but cannot affect security or correctness.
 
