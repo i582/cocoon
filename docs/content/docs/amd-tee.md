@@ -3,7 +3,7 @@ title: AMD TEE
 ---
 
 Trusted Execution Environment on AMD processors is feasible by a set of related
-technologies: SEV, SEV-ES, SEV-SNP - [1]. The whole concept is similar to Intel
+technologies: SEV, SEV-ES, SEV-SNP — [1]. The whole concept is similar to Intel
 TDX although implementation details are very different.
 
 ## Host preparation
@@ -14,7 +14,7 @@ Enable related features(SMEE, SEV SNP NB, SNP Memory) in machine BIOS. Please
 refer to [2] for the details.
 NB!
 1. BIOS and BMC update migth be required.
-2. SNP Memory (RMP Table) Configuration - Enabled (no Custom)
+2. SNP Memory (RMP Table) Configuration — Enabled (no Custom)
 
 Check dmesg if all the required technologies are enabled e.g.:
 [   16.178090] kvm_amd: SEV enabled (ASIDs 32 - 1006)
@@ -64,7 +64,7 @@ different set of OIDs is used to distinguish AMD vs Intel TEE.
 
 ## Links
 
-1. AMD Secure Encrypted Virtualization (SEV) -  https://www.amd.com/en/developer/sev.html
-2. Using SEV with AMD EPYC Processors - https://www.amd.com/content/dam/amd/en/documents/developer/58207-using-sev-with-amd-epyc-processors.pdf
-3. Versioned Chip Endorsement Key (VCEK) Certificate and KDS Interface Specification - https://docs.amd.com/v/u/en-US/57230
-4. SEV Secure Nested Paging Firmware ABI Specification - https://docs.amd.com/v/u/en-US/56860
+1. AMD Secure Encrypted Virtualization (SEV) — https://www.amd.com/en/developer/sev.html
+2. Using SEV with AMD EPYC Processors — https://www.amd.com/content/dam/amd/en/documents/developer/58207-using-sev-with-amd-epyc-processors.pdf
+3. Versioned Chip Endorsement Key (VCEK) Certificate and KDS Interface Specification — https://docs.amd.com/v/u/en-US/57230
+4. SEV Secure Nested Paging Firmware ABI Specification — https://docs.amd.com/v/u/en-US/56860

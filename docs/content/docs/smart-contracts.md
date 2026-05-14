@@ -5,10 +5,10 @@ title: Smart Contracts and Payment System
 ## Overview
 
 COCOON uses the TON blockchain for:
-1. **Worker registration** - Workers register with the network
-2. **Payment settlement** - Clients pay proxies, proxies pay workers
-3. **Reputation tracking** - On-chain reputation scores
-4. **Registry** - Root contract that maintains a list of allowed images, models, proxies
+1. **Worker registration** — Workers register with the network
+2. **Payment settlement** — Clients pay proxies, proxies pay workers
+3. **Reputation tracking** — On-chain reputation scores
+4. **Registry** — Root contract that maintains a list of allowed images, models, proxies
 
 ## Architecture
 

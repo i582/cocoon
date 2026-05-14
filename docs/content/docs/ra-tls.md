@@ -21,7 +21,7 @@ Both parties present RA-TLS certificates and verify each other during the TLS ha
 
 ## Certificate Format
 
-Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `generate_tdx_self_signed_cert`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — function `generate_tdx_self_signed_cert`.
 
 ### Structure
 
@@ -50,8 +50,8 @@ X.509 Certificate
 
 We use private enterprise OID space `1.3.6.1.4.1.12345.*`:
 
-- `1.3.6.1.4.1.12345.1` - **TDX_QUOTE**: Raw TDX quote bytes
-- `1.3.6.1.4.1.12345.2` - **TDX_USER_CLAIMS**: Serialized user claims
+- `1.3.6.1.4.1.12345.1` — **TDX_QUOTE**: Raw TDX quote bytes
+- `1.3.6.1.4.1.12345.2` — **TDX_USER_CLAIMS**: Serialized user claims
 
 Both extensions are marked as **critical** so non-aware TLS implementations will reject them (fail-safe).
 
@@ -98,13 +98,13 @@ See [`tee/cocoon/gen-cert.cpp`](https://github.com/TelegramMessenger/cocoon/blob
 ```
 
 Outputs:
-- `<name>_cert.pem` - Certificate with embedded quote
-- `<name>_key.pem` - Ed25519 private key
-- `<name>_image_hash.b64` - TEE image hash (base64)
+- `<name>_cert.pem` — Certificate with embedded quote
+- `<name>_key.pem` — Ed25519 private key
+- `<name>_image_hash.b64` — TEE image hash (base64)
 
 ## Certificate Verification
 
-Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - struct `Verifier`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — struct `Verifier`.
 
 During TLS handshake, the custom verify callback performs the following checks:
 
@@ -145,40 +145,40 @@ If all checks pass → connection allowed.
 
 ## Policy System
 
-Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - struct `DefaultPolicy`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — struct `DefaultPolicy`.
 
 ### Built-in Policies
 
-- **`any`** - No attestation required (no TdxInterface)
-- **`fake_tee`** - Accept fake quotes for testing
-- **`tee`** - Require real TDX with default checks
-- **`tee` with constraints** - Require specific measurements
+- **`any`** — No attestation required (no TdxInterface)
+- **`fake_tee`** — Accept fake quotes for testing
+- **`tee`** — Require real TDX with default checks
+- **`tee` with constraints** — Require specific measurements
 
 ### Policy Constraints
 
 Policies can specify allowed values for:
-- `allowed_mrtd` - Allowed firmware measurements
-- `allowed_rtmr` - Allowed runtime measurement sets (all 4 RTMRs)
-- `allowed_image_hashes` - Allowed image hashes (derived from MRTD+RTMRs)
-- `allowed_collateral_root_hashes` - Allowed Intel root key IDs
+- `allowed_mrtd` — Allowed firmware measurements
+- `allowed_rtmr` — Allowed runtime measurement sets (all 4 RTMRs)
+- `allowed_image_hashes` — Allowed image hashes (derived from MRTD+RTMRs)
+- `allowed_collateral_root_hashes` — Allowed Intel root key IDs
 
 Empty lists mean "allow any" for that field.
 
 ### Policy Validation
 
-See [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `DefaultPolicy::validate_tdx_attestation`. Policy checks:
+See [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — function `DefaultPolicy::validate_tdx_attestation`. Policy checks:
 
-1. **Reportdata matches user claims** - Verify `attestation.reportdata == SHA-512(user_claims)`
-2. **MRTD in allowlist** - Check firmware measurement (if policy specifies)
-3. **RTMRs in allowlist** - Check all four runtime measurements (if policy specifies)
-4. **Image hash in allowlist** - Check derived image hash (if policy specifies)
-5. **Collateral root hash in allowlist** - Check Intel DCAP root key ID (if policy specifies)
+1. **Reportdata matches user claims** — Verify `attestation.reportdata == SHA-512(user_claims)`
+2. **MRTD in allowlist** — Check firmware measurement (if policy specifies)
+3. **RTMRs in allowlist** — Check all four runtime measurements (if policy specifies)
+4. **Image hash in allowlist** — Check derived image hash (if policy specifies)
+5. **Collateral root hash in allowlist** — Check Intel DCAP root key ID (if policy specifies)
 
 All checks must pass for validation to succeed.
 
 ## Image Hash Calculation
 
-Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `AttestationData::image_hash`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — function `AttestationData::image_hash`.
 
 Image hash is SHA-256 of attestation data (MRTD + RTMRs + other measurements), **excluding reportdata**.
 
@@ -227,17 +227,17 @@ Or use JSON config file. See `router --generate-config` for examples.
 
 ## TLS Configuration
 
-Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) - function `create_ssl_ctx`.
+Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp) — function `create_ssl_ctx`.
 
 ### Protocol and Ciphers
 
-- **TLS 1.3 minimum** - Better security, simpler handshake, modern ciphers
+- **TLS 1.3 minimum** — Better security, simpler handshake, modern ciphers
 - **Cipher suites:** `TLS_AES_128_GCM_SHA256` and `TLS_AES_256_GCM_SHA384` only
 
 ### Session Management
 
-- **No session tickets** (`SSL_OP_NO_TICKET`) - Each connection performs full RA verification
-- **No session resumption** - Intentional: we want fresh attestation verification per connection
+- **No session tickets** (`SSL_OP_NO_TICKET`) — Each connection performs full RA verification
+- **No session resumption** — Intentional: we want fresh attestation verification per connection
 - Verification results are cached (see Attestation Caching section)
 
 ### Mutual TLS
@@ -246,7 +246,7 @@ Both client and server modes verify peer certificates:
 - Client mode: Verifies server certificate
 - Server mode: Verifies client certificate, requires client to present certificate
 
-Both parties must present valid RA-TLS certificates - full mutual authentication.
+Both parties must present valid RA-TLS certificates — full mutual authentication.
 
 ## Security
 
@@ -281,8 +281,8 @@ TDX quotes lack timestamps (hardware doesn't know time). Mitigations:
 Quote verification requires "collaterals" from Intel via PCCS (Provisioning Certificate Caching Service).
 
 **Two key points:**
-1. **Must use PCCS** - Intel's rules require fetching collaterals via PCCS (not directly)
-2. **Untrusted PCCS is fine** - We verify Intel's root key ID
+1. **Must use PCCS** — Intel's rules require fetching collaterals via PCCS (not directly)
+2. **Untrusted PCCS is fine** — We verify Intel's root key ID
 
 **How it works:**
 

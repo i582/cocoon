@@ -12,7 +12,7 @@ export function ThemeLogo() {
         <span className="text-[1.05rem] font-semibold tracking-tight text-fd-foreground">
           Cocoon
         </span>
-        <span className="mt-0.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-fd-muted-foreground">
+        <span className="mt-0.5 ml-0.5 text-[0.6rem] font-medium uppercase tracking-[0.14em] text-fd-muted-foreground">
           by Telegram
         </span>
       </span>

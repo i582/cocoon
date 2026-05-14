@@ -13,9 +13,9 @@ title: Deployment and Testing
 
 First you should enable TEE and prepare the GPU for confidential computing. For this you may refer to:
 
-- [Enabling Intel TDX](https://cc-enabling.trustedservices.intel.com/intel-tdx-enabling-guide/03/hardware_selection/) - Probably you will have to enable TDX in BIOS. It could be problematic on machines from cloud providers.
+- [Enabling Intel TDX](https://cc-enabling.trustedservices.intel.com/intel-tdx-enabling-guide/03/hardware_selection/) — Probably you will have to enable TDX in BIOS. It could be problematic on machines from cloud providers.
 - [Enabling AMD SEV](https://www.amd.com/content/dam/amd/en/documents/developer/58207-using-sev-with-amd-epyc-processors.pdf)
-- [Enabling CC on NVIDIA GPU](https://github.com/NVIDIA/gpu-admin-tools) - You may have to update your VBIOS for GPU attestation to fully work. Note that it could be complicated as you can't simply download it and would have to contact support
+- [Enabling CC on NVIDIA GPU](https://github.com/NVIDIA/gpu-admin-tools) — You may have to update your VBIOS for GPU attestation to fully work. Note that it could be complicated as you can't simply download it and would have to contact support
 
 One straightforward way to prepare your hardware is to use the [canonical guide](https://github.com/canonical/tdx), but it could be too specific for general use.
 
@@ -139,7 +139,7 @@ curl http://localhost:12000/jsonstats
 curl http://localhost:12000/stats
 ```
 
-Proxy and worker run in real TDX VMs with real attestation. There is no true blockchain connection at this point - payments are simulated. Note that in this mode we don't actually verify the TDX image hash. As such, this mode should not be used in any publicly accessible configuration.
+Proxy and worker run in real TDX VMs with real attestation. There is no true blockchain connection at this point — payments are simulated. Note that in this mode we don't actually verify the TDX image hash. As such, this mode should not be used in any publicly accessible configuration.
 
 Also, the VM allows SSH on ports 12005 and 11005, and the disk is encrypted with a constant key.
 
@@ -184,9 +184,9 @@ HTTP stats are available on the following ports:
 For instances, add (instance * 10) to the port number.
 
 **Available endpoints:**
-- `/stats` - Human-readable statistics of the runner
-- `/jsonstats` - JSON-formatted statistics
-- `/perf` - Current performance stats of the runner
+- `/stats` — Human-readable statistics of the runner
+- `/jsonstats` — JSON-formatted statistics
+- `/perf` — Current performance stats of the runner
 
 **Examples:**
 ```bash
@@ -237,10 +237,10 @@ CID = instance number * 10 + base CID (6 for worker, 7 for proxy, 4 for client)
 
 **Monitored Services:**
 
-- `cocoon-worker-runner` - Main worker service
-- `cocoon-proxy-runner` - Main proxy service
-- `cocoon-vllm` - vLLM inference engine
-- `nvidia-tdx` - GPU attestation service
+- `cocoon-worker-runner` — Main worker service
+- `cocoon-proxy-runner` — Main proxy service
+- `cocoon-vllm` — vLLM inference engine
+- `nvidia-tdx` — GPU attestation service
 
 **Common Examples:**
 

@@ -80,8 +80,8 @@ All communication is encrypted via RA-TLS. Attestations are verified at connecti
 
 Each TEE VM's identity is defined by its **image hash**, which includes:
 
-1. **Base image** - The root filesystem and all binaries (measured by TEE)
-2. **Static config** - Configuration that affects security/correctness (measured by TEE)
+1. **Base image** — The root filesystem and all binaries (measured by TEE)
+2. **Static config** — Configuration that affects security/correctness (measured by TEE)
 
 **Runtime config** (not measured) affects behavior but not safety or correctness. Examples:
 
@@ -93,11 +93,11 @@ Each TEE VM's identity is defined by its **image hash**, which includes:
 
 The **root smart contract** on the TON blockchain serves as the trusted registry containing:
 
-1. **List of proxy IPs** - Known proxy endpoints
-2. **Allowed image hashes** - Valid proxy and worker TEE measurements
-3. **Supported model hashes** - Verified AI model hashes
-4. **Config parameters** - Network-wide settings (pricing, limits, etc.)
-5. **Smart contract code** - Code for worker and proxy contracts
+1. **List of proxy IPs** — Known proxy endpoints
+2. **Allowed image hashes** — Valid proxy and worker TEE measurements
+3. **Supported model hashes** — Verified AI model hashes
+4. **Config parameters** — Network-wide settings (pricing, limits, etc.)
+5. **Smart contract code** — Code for worker and proxy contracts
 
 Anyone can verify against this on-chain registry.
 
@@ -108,7 +108,7 @@ Anyone can verify against this on-chain registry.
 **RA-TLS** ensures we communicate with the correct VMs:
 
 - All connections verify TEE attestations via RA-TLS
-- Handled transparently by `router` - inner VM services don't need attestation logic
+- Handled transparently by `router` — inner VM services don't need attestation logic
 - Each party verifies that the remote party's image hash matches the expected values
 
 ### GPU Verification

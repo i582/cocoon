@@ -6,10 +6,10 @@ title: Persistent Key Derivation (Seal Protocol)
 
 TDX guests need persistent keys that:
 
-1. **Survive reboots** - Same key after VM restart
-2. **Tied to code** - Different image → different key
-3. **Hardware-backed** - Cannot be extracted by host
-4. **Isolated per config** - Malicious config can't access good config's key
+1. **Survive reboots** — Same key after VM restart
+2. **Tied to code** — Different image → different key
+3. **Hardware-backed** — Cannot be extracted by host
+4. **Isolated per config** — Malicious config can't access good config's key
 
 **Challenge:** TDX 1.5 doesn't have native sealed storage (coming in future TDX 2.0 via `TDG.MR.KEY.GET`).
 
@@ -63,15 +63,15 @@ persistentKey#163a179a sgx_quote:bytes encrypted_secret:bytes = PersistentKey;
 ### Message Format
 
 **Request (`getPersistentKey`):**
-- `tdx_report` - TDX report structure (`sgx_report2_t`, 1024 bytes)
+- `tdx_report` — TDX report structure (`sgx_report2_t`, 1024 bytes)
   - reportdata = `SHA256(public_key) || 32 zero bytes`
-- `public_key` - EC P-256 public key (64 bytes, X||Y coordinates in little-endian)
-- `key_name` - String identifying key purpose (e.g., "worker-wallet")
+- `public_key` — EC P-256 public key (64 bytes, X||Y coordinates in little-endian)
+- `key_name` — String identifying key purpose (e.g., "worker-wallet")
 
 **Response (`persistentKey`):**
-- `sgx_quote` - SGX quote from Intel QE (Quoting Enclave)
+- `sgx_quote` — SGX quote from Intel QE (Quoting Enclave)
   - reportdata = `SHA256(public_key) || SHA256(encrypted_secret)`
-- `encrypted_secret` - 96 bytes total:
+- `encrypted_secret` — 96 bytes total:
   - Bytes 0-63: Enclave's EC P-256 public key
   - Bytes 64-95: AES-128-CTR ciphertext (encrypted persistent key)
 
@@ -79,7 +79,7 @@ persistentKey#163a179a sgx_quote:bytes encrypted_secret:bytes = PersistentKey;
 
 ### Step 1: TDX Guest Generates Request
 
-Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-client.cpp) - class `GetPersistentKeyClient`.
+Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-client.cpp) — class `GetPersistentKeyClient`.
 
 1. Generate ephemeral EC P-256 keypair
 2. Calculate reportdata = `SHA256(public_key) || 32 zero bytes` (64 bytes total)
@@ -91,7 +91,7 @@ Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoo
 
 ### Step 2: Host Forwards to SGX Enclave
 
-Implementation in [`seal-server.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-server.cpp) - class `GetPersistentKeyServer`.
+Implementation in [`seal-server.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-server.cpp) — class `GetPersistentKeyServer`.
 
 1. Receive and deserialize request from VSOCK
 2. Call SGX enclave via ECALL: `ecall_gen_key(target_info, tdx_report, public_key, key_name, ...)`
@@ -104,7 +104,7 @@ Implementation in [`seal-server.cpp`](https://github.com/TelegramMessenger/cocoo
 
 ### Step 3: SGX Enclave Generates Key
 
-Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/Enclave.cpp) - function `ecall_gen_key`.
+Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/Enclave.cpp) — function `ecall_gen_key`.
 
 #### 3.1. Validate TDX Report
 
@@ -147,12 +147,12 @@ Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/bl
 #### 3.4. Generate SGX Report
 
 Create SGX report with reportdata binding this exchange:
-- First 32 bytes: `SHA256(client_public)` - proves we're responding to this specific request
-- Next 32 bytes: `SHA256(encrypted_secret)` - proves integrity of encrypted data
+- First 32 bytes: `SHA256(client_public)` — proves we're responding to this specific request
+- Next 32 bytes: `SHA256(encrypted_secret)` — proves integrity of encrypted data
 
 ### Step 4: TDX Guest Verifies and Decrypts
 
-Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-client.cpp) - class `GetPersistentKeyClient`.
+Implementation in [`seal-client.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx/sgx-enclave/seal-client.cpp) — class `GetPersistentKeyClient`.
 
 #### 4.1. Verify SGX Quote
 
@@ -184,10 +184,10 @@ Result: 32-byte persistent key, same key on every reboot (if same image/config).
 
 The persistent key depends on:
 
-- **SGX sealing key** - Changes if SGX enclave code changes (MRENCLAVE policy) and is bound to physical CPU
-- **tee_info_hash** - TDX measurements (includes MRTD, RTMRs, config hash)
-- **tee_tcb_info_hash** - TDX TCB/firmware version
-- **key_name** - Purpose identifier (allows multiple keys)
+- **SGX sealing key** — Changes if SGX enclave code changes (MRENCLAVE policy) and is bound to physical CPU
+- **tee_info_hash** — TDX measurements (includes MRTD, RTMRs, config hash)
+- **tee_tcb_info_hash** — TDX TCB/firmware version
+- **key_name** — Purpose identifier (allows multiple keys)
 
 **Result:** Different (CPU, SGX enclave, TDX image, TDX config, key name) → different key.
 
@@ -225,7 +225,7 @@ When SGX successfully verifies the TDX report MAC, it proves:
 - **Key loss:** If the CPU fails, key is lost forever (hardware-bound, no backup possible)
 - **Side channels:** Advanced attacks on SGX/TDX might leak keys
 
-**Note:** Replay attacks are prevented - each request uses a fresh ephemeral public key, so old TDX reports cannot be reused.
+**Note:** Replay attacks are prevented — each request uses a fresh ephemeral public key, so old TDX reports cannot be reused.
 
 ### Mitigation of key loss
 
@@ -239,9 +239,9 @@ In case of workers, we may use a key known to the owner of the workers.
 
 Three components work together:
 
-1. **seal-client** (TDX guest) - Requests key: `seal-client`
-2. **seal-server** (Host) - Forwards requests: `seal-server`
-3. **seal-enclave** (SGX) - Generates keys: `seal-enclave.signed.so`
+1. **seal-client** (TDX guest) — Requests key: `seal-client`
+2. **seal-server** (Host) — Forwards requests: `seal-server`
+3. **seal-enclave** (SGX) — Generates keys: `seal-enclave.signed.so`
 
 Implementations in [`tee/cocoon/tdx/sgx-enclave/`](https://github.com/TelegramMessenger/cocoon/tree/master/tee/cocoon/tdx/sgx-enclave).
 
@@ -274,7 +274,7 @@ SGX enclaves have limited library support. Custom binary protocol over VSOCK is 
 
 ## Future: Native TDX Sealing
 
-TDX 2.0 will provide `TDG.MR.KEY.GET` instruction for native sealed storage - it is simpler (no SGX needed) with same security properties.
+TDX 2.0 will provide `TDG.MR.KEY.GET` instruction for native sealed storage — it is simpler (no SGX needed) with same security properties.
 
 ## Next Steps
 

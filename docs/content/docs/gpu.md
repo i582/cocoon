@@ -6,9 +6,9 @@ title: GPU Confidential Computing
 
 COCOON workers use GPUs for AI inference inside TDX VMs. This requires:
 
-1. **GPU Passthrough** - Gives the TDX guest direct access to GPU hardware (via VFIO)
-2. **GPU Attestation** - Proves the GPU is in Confidential Computing mode
-3. **Model Validation** - Verifies that the correct model is loaded
+1. **GPU Passthrough** — Gives the TDX guest direct access to GPU hardware (via VFIO)
+2. **GPU Attestation** — Proves the GPU is in Confidential Computing mode
+3. **Model Validation** — Verifies that the correct model is loaded
 
 ## Hardware Requirements
 
@@ -189,7 +189,7 @@ Each instance is independent (separate VM, separate wallet, separate keys).
 
 ### Future: Multiple GPUs per Worker
 
-**Experimental** - a single worker with multiple GPUs may have issues, such as:
+**Experimental** — a single worker with multiple GPUs may have issues, such as:
 - Interrupt routing problems
 - Poor parallelization in some models
 
