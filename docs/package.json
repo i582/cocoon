@@ -12,6 +12,7 @@
     "generated-source": "fumadocs-mdx"
   },
   "dependencies": {
+    "@orama/orama": "^3.1.18",
     "fumadocs-core": "^16.7.14",
     "fumadocs-mdx": "^14.2.13",
     "fumadocs-ui": "^16.7.14",
