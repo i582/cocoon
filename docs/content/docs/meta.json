@@ -1,6 +1,10 @@
 {
   "pages": [
     "welcome.md",
+    "developers.mdx",
+    "gpu-owners.mdx",
+    "architecture-overview.mdx",
+    "downloads.mdx",
     "architecture.md",
     "tdx-and-images.mdx",
     "amd-tee.md",

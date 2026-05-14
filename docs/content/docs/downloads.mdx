@@ -1,0 +1,138 @@
+---
+title: Downloads
+description: Overview of COCOON downloadable artifacts, source repositories, and related usage documentation.
+---
+
+This page lists all COCOON artifacts you can download or generate, and where to find the respective usage docs.
+
+## Official Worker Distribution (For GPU Owners)
+
+**What:** Prebuilt TDX worker image, launch scripts, and example configs.
+
+**Where:** [https://ci.cocoon.org/cocoon-worker-release-latest.tar.xz](https://ci.cocoon.org/cocoon-worker-release-latest.tar.xz)
+
+### Docs
+
+- [GPU owners guide](./gpu-owners.mdx) — How to unpack, configure, and run a worker
+- [Hardware + Deployment details](./deployment.md) — See prerequisites and test deployment flows
+- [GPU](./gpu.md) — GPU passthrough and attestation
+- [Architecture Overview](./architecture-overview.mdx) — High-level system layout
+
+> This is the recommended starting point if you want to run a worker and earn TON.
+
+---
+
+## Source Code Repository
+
+**What:** Full COCOON source tree, including core services, scripts, and docs.
+
+**Where:**
+
+- [https://github.com/TelegramMessenger/cocoon](https://github.com/TelegramMessenger/cocoon)
+- [https://github.com/TelegramMessenger/cocoon-contracts](https://github.com/TelegramMessenger/cocoon-contracts)
+
+### Docs
+
+- [Deployment](./deployment.md) — Build from source and run flows
+
+---
+
+## Guest VM Images (TDX)
+
+COCOON VM images are usually bundled inside the worker distribution, but you can also build them locally for verification.
+
+### Production Image (`prod`)
+
+**What:** Reproducible TDX guest image used for production workers.
+
+**Where:**
+
+- Prebuilt: Included in the official worker release archive
+- Reproducible build: Generated from source via `./scripts/build-image prod`
+
+### Docs
+
+- [TDX and Images](./tdx-and-images.mdx) — Image structure and TDX measurements
+- [Deployment](./deployment.md) — Reproducible builds and deployment details
+
+> You can independently confirm that a release matches the published sources.
+
+### Test Image (`test`)
+
+**What:** TDX guest image for local testing with fake TON.
+
+**Where:** Built from source via `./scripts/build-image test` (outputs to `images/test/`).
+
+### Docs
+
+- [Deployment](./deployment.md) — Test deployment flow
+- [TDX and Images](./tdx-and-images.mdx) — Image internals and security notes
+
+> Intended for integration tests and debugging. This mode does not enforce image-hash verification and uses a constant disk key, so it must not be exposed as a public or production service.
+
+---
+
+## Generated Binaries and Tools
+
+All runtime binaries and tools such as `cocoon-launch`, `proxy-cli`, `health-client`, and SGX/TDX helpers are built from the main repository. They are not currently distributed as separate downloads.
+
+### Docs
+
+- [Deployment](./deployment.md) — Build and run flows
+- [RA-TLS](./ra-tls.md) — `router` and certificate generation
+- [Seal Keys](./seal-keys.mdx) — `seal-client`, `seal-server`, and enclave helpers
+
+> After building, these tools live in your chosen build directory, `build/` by default.
+
+---
+
+## Reproducible Builds
+
+Anyone can verify the worker distribution by rebuilding from source. Note that this step is not needed to run your own workers.
+
+```bash
+# 1. Build the VM image (reproducible)
+./scripts/build-image prod
+
+# 2. Generate distribution
+./scripts/prepare-worker-dist ../cocoon-worker-dist
+
+# 3. Verify the TDX image matches the published release
+cd ../cocoon-worker-dist
+sha256sum images/prod/{OVMF.fd,image.vmlinuz,image.initrd,image.cmdline}
+# Compare with the published checksums
+```
+
+The same goes for model images:
+
+```bash
+# This will generate a model tar file with the full model name,
+# which includes hash and commit.
+./scripts/build-model Qwen/Qwen3-0.6B
+# Compare with the published model name
+```
+
+---
+
+## External Downloads
+
+- [Intel TDX enabling guide](https://cc-enabling.trustedservices.intel.com) — Hardware selection and platform enablement
+- [Canonical TDX reference setup](https://github.com/canonical/tdx) — Example host configs and scripts
+- [NVIDIA GPU admin tools](https://github.com/NVIDIA/gpu-admin-tools) — Utilities for enabling CC mode and managing GPUs
+- [Hugging Face access tokens](https://huggingface.co) — Tokens used by workers to download models
+
+---
+
+## Further Reading
+
+- [Architecture Overview](./architecture-overview.mdx) — Public architecture overview
+- [RA-TLS](./ra-tls.md) — Remote attestation over TLS, proxy-cli, and certificate generation
+- [Seal Keys](./seal-keys.mdx) — Persistent key derivation via SGX/TDX interaction
+- [Deployment](./deployment.md) — Deployment, testing, and debugging
+- [TDX and Images](./tdx-and-images.mdx) — Intel TDX fundamentals, boot sequence, and image generation
+- [Smart Contracts](./smart-contracts.md) — Payment system and TON blockchain integration
+- [GPU](./gpu.md) — GPU passthrough and confidential computing validation
+
+---
+
+COCOON welcomes security researchers to audit its code and protocol. Relevant findings can be submitted through the project's official channels.
