@@ -1,29 +1,29 @@
-import {source} from "@/lib/source"
+import { source } from "@/lib/source";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
   PageLastUpdate,
-} from "fumadocs-ui/layouts/docs/page"
-import {createRelativeLink} from "fumadocs-ui/mdx"
-import {getMDXComponents} from "@/lib/mdx-components"
-import type {Metadata} from "next"
-import {baseUrl} from "@/lib/metadata"
+} from "fumadocs-ui/layouts/docs/page";
+import { createRelativeLink } from "fumadocs-ui/mdx";
+import { getMDXComponents } from "@/lib/mdx-components";
+import type { Metadata } from "next";
+import { baseUrl } from "@/lib/metadata";
 
 interface PageProps {
-  params: Promise<{slug: string[]}>
+  params: Promise<{ slug: string[] }>;
 }
 
 export default async function Page(props: PageProps) {
-  const params = await props.params
-  const page = source.getPage(params.slug)
+  const params = await props.params;
+  const page = source.getPage(params.slug);
 
   if (!page) {
-    return null
+    return null;
   }
 
-  const {body: MDX, lastModified} = page.data
+  const { body: MDX, lastModified } = page.data;
 
   return (
     <DocsPage
@@ -35,7 +35,9 @@ export default async function Page(props: PageProps) {
     >
       <DocsTitle>{page.data.title}</DocsTitle>
       {page.data.description ? (
-        <DocsDescription className="mb-2">{page.data.description}</DocsDescription>
+        <DocsDescription className="mb-2">
+          {page.data.description}
+        </DocsDescription>
       ) : null}
       <DocsBody>
         <MDX
@@ -50,22 +52,22 @@ export default async function Page(props: PageProps) {
         </div>
       ) : null}
     </DocsPage>
-  )
+  );
 }
 
 export async function generateStaticParams() {
-  return source.generateParams()
+  return source.generateParams();
 }
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const params = await props.params
-  const page = source.getPage(params.slug)
+  const params = await props.params;
+  const page = source.getPage(params.slug);
 
   if (!page) {
     return {
       title: "Not Found",
       metadataBase: new URL(baseUrl),
-    }
+    };
   }
 
   return {
@@ -75,5 +77,5 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     alternates: {
       canonical: page.url,
     },
-  }
+  };
 }

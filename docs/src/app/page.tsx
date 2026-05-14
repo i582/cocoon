@@ -1,4 +1,4 @@
-import {baseUrl} from "@/lib/metadata"
+import { baseUrl } from "@/lib/metadata";
 
 export default function Page() {
   return (
@@ -6,5 +6,5 @@ export default function Page() {
       <meta httpEquiv="refresh" content={`0; url=${baseUrl}/docs`} />
       <meta name="robots" content="noindex, follow" />
     </>
-  )
+  );
 }
