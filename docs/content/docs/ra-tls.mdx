@@ -61,7 +61,7 @@ Both extensions are marked as **critical** so non-aware TLS implementations will
 
 Currently minimal (see [`tee/cocoon/tdx.h`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.h) and [`tdx.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/tdx.cpp)):
 
-```
+```cpp
 struct UserClaims {
   PublicKey public_key;  // Certificate's Ed25519 public key (32 bytes)
 }

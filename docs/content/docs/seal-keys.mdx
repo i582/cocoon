@@ -125,7 +125,7 @@ Implementation in [`Enclave.cpp`](https://github.com/TelegramMessenger/cocoon/bl
 
 2. Combine sealing key with TDX measurements:
 
-   ```
+   ```text
    persistent_key = SHA256(
      sealing_key ||          # 16 bytes - SGX enclave identity
      tee_info_hash ||        # 48 bytes - TDX measurements (MRTD, RTMRs)
