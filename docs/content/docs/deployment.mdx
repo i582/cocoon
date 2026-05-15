@@ -31,11 +31,11 @@ dmesg | grep -i tdx
 
 **Setup GPU:**
 
-- Use [`scripts/setup-gpu-vfio`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/setup-gpu-vfio) to configure GPU for passthrough
+- Use [`scripts/setup-gpu-vfio`](https://github.com/TelegramMessenger/cocoon/blob/main/scripts/setup-gpu-vfio) to configure GPU for passthrough
 
 ## Quick Start
 
-If you want just to run a worker, please see the [repository README](https://github.com/TelegramMessenger/cocoon/blob/master/README.md). The following instructions are mostly for developers.
+If you want just to run a worker, please see the [repository README](https://github.com/TelegramMessenger/cocoon/blob/main/README.md). The following instructions are mostly for developers.
 
 ## Building from Source
 
@@ -185,9 +185,9 @@ Apart from that it is mostly like test deployment. Only now you won't have acces
 
 HTTP stats are available on the following ports:
 
-- Port 10000 for client
-- Port 11000 for proxy
-- Port 12000 for worker
+- Port `10000` for client
+- Port `11000` for proxy
+- Port `12000` for worker
 
 For instances, add (instance \* 10) to the port number.
 
