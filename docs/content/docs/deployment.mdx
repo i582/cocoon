@@ -145,7 +145,7 @@ curl http://localhost:12000/stats
 
 Proxy and worker run in real TDX VMs with real attestation. There is no true blockchain connection at this point — payments are simulated. Note that in this mode we don't actually verify the TDX image hash. As such, this mode should not be used in any publicly accessible configuration.
 
-Also, the VM allows SSH on ports 12005 and 11005, and the disk is encrypted with a constant key.
+Also, the VM allows SSH on ports `12005` and `11005`, and the disk is encrypted with a constant key.
 
 ## Use Case 3: Test Images with Real TON
 
@@ -254,41 +254,75 @@ CID = instance number \* 10 + base CID (6 for worker, 7 for proxy, 4 for client)
 
 **Common Examples:**
 
+Check overall worker health:
+
 ```bash
-# Check overall worker health
 ./health-client --instance worker status
+```
 
-# Check specific service status
+Check specific service status:
+
+```bash
 ./health-client --instance worker status cocoon-vllm
+```
 
-# View system metrics
+View system metrics:
+
+```bash
 ./health-client -i worker sys
+```
 
-# View GPU metrics
+View GPU metrics:
+
+```bash
 ./health-client -i worker gpu
+```
 
-# View TDX attestation info (image hash and RTMRs)
+View TDX attestation info (image hash and RTMRs):
+
+```bash
 ./health-client -i worker tdx
+```
 
-# Get detailed service info with logs
+Get detailed service info with logs:
+
+```bash
 ./health-client -i worker svc cocoon-vllm
+```
 
-# View service logs (last 100 lines)
+View service logs (last 100 lines):
+
+```bash
 ./health-client -i worker logs cocoon-worker-runner 100
+```
 
-# View vLLM logs (last 200 lines)
+View vLLM logs (last 200 lines):
+
+```bash
 ./health-client -i worker logs cocoon-vllm 200
+```
 
-# Get all metrics at once
+Get all metrics at once:
+
+```bash
 ./health-client -i worker all
+```
 
-# Check specific instance (instance 2)
+Check specific instance (instance 2):
+
+```bash
 ./health-client -i worker:2 status
+```
 
-# Check proxy logs
+Check proxy logs:
+
+```bash
 ./health-client -i proxy logs cocoon-proxy-runner 50
+```
 
-# Using CID directly (worker instance 1, CID = 16)
+Using CID directly (worker instance 1, CID = 16):
+
+```bash
 ./health-client --cid 16 sys
 ./health-client --cid 16 gpu
 ```

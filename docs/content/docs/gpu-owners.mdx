@@ -90,11 +90,11 @@ All options are set in `worker.conf` (INI format). See `worker.conf.example` for
 ### Required Options
 
 | Option                  | Description                                           |
-| ----------------------- | ----------------------------------------------------- | ---------------- |
+| ----------------------- | ----------------------------------------------------- |
 | `type`                  | Node type (always `worker` for workers)               |
 | `model`                 | AI model to serve (e.g. `Qwen/Qwen3-0.6B`)            |
 | `owner_address`         | Your TON wallet address (receives payments)           |
-| `gpu`                   | GPU PCI address (find with `lspci                     | grep -i nvidia`) |
+| `gpu`                   | GPU PCI address (find with `lspci grep -i nvidia`)    |
 | `node_wallet_key`       | Private key for revenue wallet (base64, keep private) |
 | `hf_token`              | Hugging Face token                                    |
 | `ton_config`            | Path to TON network config file (see below)           |
@@ -215,20 +215,33 @@ Available endpoints:
 
 For detailed monitoring, use `health-client`:
 
+Check worker health:
+
 ```bash
-# Check worker health
 ./health-client --instance worker status
+```
 
-# View system metrics
+View system metrics:
+
+```bash
 ./health-client -i worker sys
+```
 
-# View GPU metrics
+View GPU metrics:
+
+```bash
 ./health-client -i worker gpu
+```
 
-# View service logs
+View service logs:
+
+```bash
 ./health-client -i worker logs cocoon-vllm 100
+```
 
-# Get all metrics
+Get all metrics:
+
+```bash
 ./health-client -i worker all
 ```
 
