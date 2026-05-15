@@ -198,7 +198,7 @@ The quote proves "This specific code (identified by MRTD/RTMRs) generated this r
 
 Inside the TDX guest, the VM can request the CPU to generate an attestation quote. The quote includes custom report data (64 bytes) — COCOON uses this to include the hash of the TLS certificate's public key.
 
-See [RA-TLS documentation](ra-tls.md) for how quotes are embedded in TLS certificates.
+See [RA-TLS documentation](ra-tls.mdx) for how quotes are embedded in TLS certificates.
 
 ### Quote Verification
 
@@ -219,7 +219,7 @@ PCCS can run anywhere (host, separate server, or inside TDX). Multiple nodes can
 
 Workers use encrypted storage for persistent data (wallet keys, state, etc.):
 
-1. Persistent key is derived during initialization (see [Seal Keys](seal-keys.md))
+1. Persistent key is derived during initialization (see [Seal Keys](seal-keys.mdx))
 2. Key is used to create/unlock a LUKS-encrypted volume
 3. Encrypted volume is mounted at `/data`
 
@@ -249,6 +249,6 @@ TDX provides hardware-enforced isolation and cryptographic proof of what code is
 
 ## Next Steps
 
-- For RA-TLS (using quotes in TLS): [RA-TLS](ra-tls.md)
-- For persistent keys: [Seal Keys](seal-keys.md)
-- For deployment: [Deployment](deployment.md)
+- For RA-TLS (using quotes in TLS): [RA-TLS](ra-tls.mdx)
+- For persistent keys: [Seal Keys](seal-keys.mdx)
+- For deployment: [Deployment](deployment.mdx)

@@ -14,6 +14,7 @@ RA-TLS embeds TDX attestation directly into TLS certificates, enabling both encr
 ## Why RA-TLS?
 
 In COCOON, verification is **bidirectional** (mutual authentication):
+
 - **Client → Proxy:** Client verifies proxy is running the correct TDX image
 - **Proxy → Worker:** Proxy verifies worker is running the correct TDX image
 - **Worker → Proxy:** Worker verifies proxy is running the correct TDX image
@@ -99,6 +100,7 @@ See [`tee/cocoon/gen-cert.cpp`](https://github.com/TelegramMessenger/cocoon/blob
 ```
 
 Outputs:
+
 - `<name>_cert.pem` — Certificate with embedded quote
 - `<name>_key.pem` — Ed25519 private key
 - `<name>_image_hash.b64` — TEE image hash (base64)
@@ -112,29 +114,35 @@ During TLS handshake, the custom verify callback performs the following checks:
 ### Verification Steps
 
 1. **Allow self-signed certificates at depth 0**
+
    - Accept `X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT` error
    - Accept `X509_V_ERR_UNHANDLED_CRITICAL_EXTENSION` error
    - We expect self-signed certs with custom extensions
 
 2. **Reject certificates at depth > 0**
+
    - Only self-signed (depth 0) allowed
    - No certificate chains
 
 3. **Verify critical extensions unknown to OpenSSL**
+
    - Skip non-critical extensions
    - Skip extensions OpenSSL natively supports (Basic Constraints, Key Usage, etc.)
    - For critical extensions unknown to OpenSSL: only allow TDX_QUOTE and TDX_USER_CLAIMS
    - Reject any other unknown critical OID
 
 4. **Extract TDX extensions**
+
    - Extract TDX_QUOTE (may be absent for "any" policy)
    - Extract TDX_USER_CLAIMS
 
 5. **Extract and validate public key**
+
    - Must be Ed25519 (32 bytes)
    - Reject other key types
 
 6. **Build UserClaims from certificate**
+
    - Currently: just set `public_key` from certificate
    - Future: deserialize additional fields from TDX_USER_CLAIMS extension
 
@@ -158,6 +166,7 @@ Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/co
 ### Policy Constraints
 
 Policies can specify allowed values for:
+
 - `allowed_mrtd` — Allowed firmware measurements
 - `allowed_rtmr` — Allowed runtime measurement sets (all 4 RTMRs)
 - `allowed_image_hashes` — Allowed image hashes (derived from MRTD+RTMRs)
@@ -184,6 +193,7 @@ Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/co
 Image hash is SHA-256 of attestation data (MRTD + RTMRs + other measurements), **excluding reportdata**.
 
 **Why exclude reportdata?**
+
 - Reportdata changes per certificate (contains hash of public key)
 - Image hash should be constant for the same image
 - Image hash identifies the code, not the specific instance
@@ -244,6 +254,7 @@ Implementation in [`tee/cocoon/tdx.cpp`](https://github.com/TelegramMessenger/co
 ### Mutual TLS
 
 Both client and server modes verify peer certificates:
+
 - Client mode: Verifies server certificate
 - Server mode: Verifies client certificate, requires client to present certificate
 
@@ -258,6 +269,7 @@ Both parties must present valid RA-TLS certificates — full mutual authenticati
 The implementation in `generate_tdx_self_signed_cert` enforces this. Without this binding, attackers could steal quotes from good VMs and attach them to their own certificates.
 
 **How it works:**
+
 - Quote's reportdata = SHA-512(user_claims)
 - User claims contain the public key
 - Different public key → different reportdata → verification fails
@@ -265,6 +277,7 @@ The implementation in `generate_tdx_self_signed_cert` enforces this. Without thi
 ### Bidirectional Verification Support
 
 Both parties may verify each other's TDX attestations:
+
 - Proxy verifies worker's quote and image hash
 - Worker verifies proxy's quote and image hash
 
@@ -273,6 +286,7 @@ This prevents workers connecting to malicious proxies and proxies accepting fake
 ### Quote Replay Protection
 
 TDX quotes lack timestamps (hardware doesn't know time). Mitigations:
+
 - Short certificate lifetimes (1 day)
 - Can include timestamp in user claims (verified by policy)
 - Daily regeneration
@@ -282,6 +296,7 @@ TDX quotes lack timestamps (hardware doesn't know time). Mitigations:
 Quote verification requires "collaterals" from Intel via PCCS (Provisioning Certificate Caching Service).
 
 **Two key points:**
+
 1. **Must use PCCS** — Intel's rules require fetching collaterals via PCCS (not directly)
 2. **Untrusted PCCS is fine** — We verify Intel's root key ID
 
@@ -290,6 +305,7 @@ Quote verification requires "collaterals" from Intel via PCCS (Provisioning Cert
 During quote verification (`RealTdxInterface::validate_quote`), we extract the Intel root key ID from the verification result. Our policy checks this ID against an embedded whitelist of known Intel root keys (see default value in [`router.cpp`](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/router.cpp)).
 
 This prevents:
+
 - Fake PCCS providing collaterals signed by compromised/fake root certificates
 - MITM attacks on collateral fetching
 
@@ -318,7 +334,7 @@ This provides sufficient freshness guarantees without regenerating quotes per co
 
 ## Next Steps
 
-- For TDX fundamentals: [TDX and Images](tdx-and-images.md)
-- For persistent keys: [Seal Keys](seal-keys.md)
+- For TDX fundamentals: [TDX and Images](tdx-and-images.mdx)
+- For persistent keys: [Seal Keys](seal-keys.mdx)
 - For router usage details: [README](https://github.com/TelegramMessenger/cocoon/blob/master/tee/cocoon/README.md)
-- For deployment: [Deployment](deployment.md)
+- For deployment: [Deployment](deployment.mdx)

@@ -5,7 +5,10 @@ description: GPU owner guide for running COCOON workers, configuring hosts, and 
 
 COCOON allows GPU owners to contribute confidential AI inference capacity to a decentralized network on TON. By running the COCOON stack on a suitable TEE-enabled GPU server, you provide private, verifiable model execution and transparently receive TON payments for each processed request.
 
-> As a GPU owner, you bring the hardware and configuration — COCOON provides the protocol, attestation, and trustless payment distribution.
+<Callout>
+  As a GPU owner, you bring the hardware and configuration — COCOON provides the
+  protocol, attestation, and trustless payment distribution.
+</Callout>
 
 ## Prerequisites
 
@@ -21,7 +24,11 @@ First, you should enable TDX and prepare your GPU for confidential computing. Fo
 
 One straightforward way to prepare your hardware is to use the [Canonical guide](https://github.com/canonical/tdx), but it could be too specific for general use.
 
-> You may also find the `./scripts/setup-gpu-vfio` script helpful to prepare your GPU for confidential computing. Run it without arguments to see usage instructions.
+<Callout type="idea">
+  You may also find the `./scripts/setup-gpu-vfio` script helpful to prepare
+  your GPU for confidential computing. Run it without arguments to see usage
+  instructions.
+</Callout>
 
 ## Quick Start
 
@@ -42,7 +49,11 @@ One straightforward way to prepare your hardware is to use the [Canonical guide]
 
    You may build your own `seal-server`, but `enclave.signed.so` MUST be from the archive.
 
-   > Important: `seal-server` must be running before starting the worker. It provides secure key derivation for the TDX guest. Leave it running in the background.
+   <Callout type="warning">
+     Important: `seal-server` must be running before starting the worker. It
+     provides secure key derivation for the TDX guest. Leave it running in the
+     background.
+   </Callout>
 
 3. Create configuration:
 
@@ -156,7 +167,10 @@ Workers need persistent keys that:
 - Are tied to the specific TDX image and configuration
 - Cannot be accessed by the host
 
-> `seal-server` uses an SGX enclave to derive these keys based on the TDX guest's attestation.
+<Callout type="info">
+  `seal-server` uses an SGX enclave to derive these keys based on the TDX
+  guest's attestation.
+</Callout>
 
 ### How to run
 
@@ -172,7 +186,9 @@ Important:
 - One `seal-server` instance can serve multiple workers
 - Without `seal-server`, workers will fail to initialize
 
-> `seal-server` is not required when using `--test --fake-ton`.
+<Callout type="info">
+  `seal-server` is not required when using `--test --fake-ton`.
+</Callout>
 
 ## Monitoring
 
@@ -216,16 +232,18 @@ For detailed monitoring, use `health-client`:
 ./health-client -i worker all
 ```
 
-> Run `./health-client --help` for complete usage information.
+<Callout type="info">
+  Run `./health-client --help` for complete usage information.
+</Callout>
 
 ## Further Reading
 
-- [Architecture](./architecture.md) — Detailed COCOON architecture documentation
+- [Architecture](./architecture.mdx) — Detailed COCOON architecture documentation
 - [TDX and Images](./tdx-and-images.mdx) — Intel TDX fundamentals, boot sequence, and image generation
-- [RA-TLS](./ra-tls.md) — Remote attestation over TLS, proxy-cli, and certificate generation
-- [Smart Contracts](./smart-contracts.md) — Payment system and TON blockchain integration
+- [RA-TLS](./ra-tls.mdx) — Remote attestation over TLS, proxy-cli, and certificate generation
+- [Smart Contracts](./smart-contracts.mdx) — Payment system and TON blockchain integration
 - [Seal Keys](./seal-keys.mdx) — Persistent key derivation via SGX/TDX interaction
-- [Deployment](./deployment.md) — Deployment, testing, and debugging
+- [Deployment](./deployment.mdx) — Deployment, testing, and debugging
 - [Developers](./developers.mdx) — Information for developers looking to integrate COCOON
 
 ---

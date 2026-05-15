@@ -14,11 +14,14 @@ This page lists all COCOON artifacts you can download or generate, and where to 
 ### Docs
 
 - [GPU owners guide](./gpu-owners.mdx) — How to unpack, configure, and run a worker
-- [Hardware + Deployment details](./deployment.md) — See prerequisites and test deployment flows
-- [GPU](./gpu.md) — GPU passthrough and attestation
+- [Hardware + Deployment details](./deployment.mdx) — See prerequisites and test deployment flows
+- [GPU](./gpu.mdx) — GPU passthrough and attestation
 - [Architecture Overview](./architecture-overview.mdx) — High-level system layout
 
-> This is the recommended starting point if you want to run a worker and earn TON.
+<Callout type="success">
+  This is the recommended starting point if you want to run a worker and earn
+  TON.
+</Callout>
 
 ---
 
@@ -33,7 +36,7 @@ This page lists all COCOON artifacts you can download or generate, and where to 
 
 ### Docs
 
-- [Deployment](./deployment.md) — Build from source and run flows
+- [Deployment](./deployment.mdx) — Build from source and run flows
 
 ---
 
@@ -53,9 +56,11 @@ COCOON VM images are usually bundled inside the worker distribution, but you can
 ### Docs
 
 - [TDX and Images](./tdx-and-images.mdx) — Image structure and TDX measurements
-- [Deployment](./deployment.md) — Reproducible builds and deployment details
+- [Deployment](./deployment.mdx) — Reproducible builds and deployment details
 
-> You can independently confirm that a release matches the published sources.
+<Callout type="info">
+  You can independently confirm that a release matches the published sources.
+</Callout>
 
 ### Test Image (`test`)
 
@@ -65,10 +70,14 @@ COCOON VM images are usually bundled inside the worker distribution, but you can
 
 ### Docs
 
-- [Deployment](./deployment.md) — Test deployment flow
+- [Deployment](./deployment.mdx) — Test deployment flow
 - [TDX and Images](./tdx-and-images.mdx) — Image internals and security notes
 
-> Intended for integration tests and debugging. This mode does not enforce image-hash verification and uses a constant disk key, so it must not be exposed as a public or production service.
+<Callout type="warning">
+  Intended for integration tests and debugging. This mode does not enforce
+  image-hash verification and uses a constant disk key, so it must not be
+  exposed as a public or production service.
+</Callout>
 
 ---
 
@@ -78,11 +87,14 @@ All runtime binaries and tools such as `cocoon-launch`, `proxy-cli`, `health-cli
 
 ### Docs
 
-- [Deployment](./deployment.md) — Build and run flows
-- [RA-TLS](./ra-tls.md) — `router` and certificate generation
+- [Deployment](./deployment.mdx) — Build and run flows
+- [RA-TLS](./ra-tls.mdx) — `router` and certificate generation
 - [Seal Keys](./seal-keys.mdx) — `seal-client`, `seal-server`, and enclave helpers
 
-> After building, these tools live in your chosen build directory, `build/` by default.
+<Callout type="info">
+  After building, these tools live in your chosen build directory, `build/` by
+  default.
+</Callout>
 
 ---
 
@@ -126,12 +138,12 @@ The same goes for model images:
 ## Further Reading
 
 - [Architecture Overview](./architecture-overview.mdx) — Public architecture overview
-- [RA-TLS](./ra-tls.md) — Remote attestation over TLS, proxy-cli, and certificate generation
+- [RA-TLS](./ra-tls.mdx) — Remote attestation over TLS, proxy-cli, and certificate generation
 - [Seal Keys](./seal-keys.mdx) — Persistent key derivation via SGX/TDX interaction
-- [Deployment](./deployment.md) — Deployment, testing, and debugging
+- [Deployment](./deployment.mdx) — Deployment, testing, and debugging
 - [TDX and Images](./tdx-and-images.mdx) — Intel TDX fundamentals, boot sequence, and image generation
-- [Smart Contracts](./smart-contracts.md) — Payment system and TON blockchain integration
-- [GPU](./gpu.md) — GPU passthrough and confidential computing validation
+- [Smart Contracts](./smart-contracts.mdx) — Payment system and TON blockchain integration
+- [GPU](./gpu.mdx) — GPU passthrough and confidential computing validation
 
 ---
 

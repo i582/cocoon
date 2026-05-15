@@ -7,7 +7,10 @@ COCOON is a decentralized AI inference platform on TON that securely connects GP
 
 This document outlines how COCOON provides private, attested model execution on confidential-compute hardware. At a high level, it covers its main components, the end-to-end request flow, and the system's trust model.
 
-> For a complete technical overview, this page should be read alongside the in-depth technical documentation in this docs set.
+<Callout type="info">
+  For a complete technical overview, this page should be read alongside the
+  in-depth technical documentation in this docs set.
+</Callout>
 
 ## Overview
 
@@ -28,7 +31,10 @@ COCOON consists of three parts:
 - **Proxy** — The proxy selects a suitable worker and forwards the request.
 - **Worker** — The worker executes requests on GPU.
 
-> Both proxy and worker run inside TEE, ensuring all data (prompts, responses) remains private and cannot be accessed by server owners.
+<Callout type="info">
+  Both proxy and worker run inside TEE, ensuring all data (prompts, responses)
+  remains private and cannot be accessed by server owners.
+</Callout>
 
 ### Worker
 
@@ -53,7 +59,10 @@ COCOON consists of three parts:
 
 Current deployment: Proxies are operated by the COCOON team for simplicity.
 
-> Future: Anyone will be able to run their own proxy, just like workers, creating a fully decentralized network.
+<Callout type="idea">
+  Future: Anyone will be able to run their own proxy, just like workers,
+  creating a fully decentralized network.
+</Callout>
 
 ### Client
 
@@ -63,7 +72,11 @@ Current deployment: Proxies are operated by the COCOON team for simplicity.
 - Validates proxy TEE attestations to ensure requests are sent only to trusted proxies
 - Pays proxies for completed requests
 
-> Note: The client library is designed to run on servers and backend infrastructure. For example, the Telegram backend would run multiple client instances to handle user requests.
+<Callout type="info">
+  Note: The client library is designed to run on servers and backend
+  infrastructure. For example, the Telegram backend would run multiple client
+  instances to handle user requests.
+</Callout>
 
 For direct device and app usage on mobile and desktop, a separate lightweight library is being developed.
 
@@ -155,17 +168,20 @@ Few Proxies (e.g. 10-100)
 Many Workers (e.g. 1000+)
 ```
 
-> Workers connect to proxies. Proxies track worker reputation and load-balance requests.
+<Callout type="info">
+  Workers connect to proxies. Proxies track worker reputation and load-balance
+  requests.
+</Callout>
 
 ## Full Documentation
 
-- [Architecture](./architecture.md) — Detailed COCOON architecture documentation
+- [Architecture](./architecture.mdx) — Detailed COCOON architecture documentation
 - [TDX and Images](./tdx-and-images.mdx) — Intel TDX fundamentals, boot sequence, and image generation
-- [RA-TLS](./ra-tls.md) — Remote attestation over TLS, proxy-cli, and certificate generation
-- [Smart Contracts](./smart-contracts.md) — Payment system and TON blockchain integration
+- [RA-TLS](./ra-tls.mdx) — Remote attestation over TLS, proxy-cli, and certificate generation
+- [Smart Contracts](./smart-contracts.mdx) — Payment system and TON blockchain integration
 - [Seal Keys](./seal-keys.mdx) — Persistent key derivation via SGX/TDX interaction
-- [GPU](./gpu.md) — GPU passthrough and confidential computing validation
-- [Deployment](./deployment.md) — Deployment, testing, and debugging
+- [GPU](./gpu.mdx) — GPU passthrough and confidential computing validation
+- [Deployment](./deployment.mdx) — Deployment, testing, and debugging
 - [Developers](./developers.mdx) — Information for developers looking to integrate COCOON
 
 ---

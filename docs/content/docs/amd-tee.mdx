@@ -14,13 +14,14 @@ TDX although implementation details are very different.
 Enable related features(SMEE, SEV SNP NB, SNP Memory) in machine BIOS. Please
 refer to [2] for the details.
 NB!
+
 1. BIOS and BMC update migth be required.
 2. SNP Memory (RMP Table) Configuration — Enabled (no Custom)
 
 Check dmesg if all the required technologies are enabled e.g.:
-[   16.178090] kvm_amd: SEV enabled (ASIDs 32 - 1006)
-[   16.178093] kvm_amd: SEV-ES enabled (ASIDs 1 - 31)
-[   16.178095] kvm_amd: SEV-SNP enabled (ASIDs 1 - 31)
+[ 16.178090] kvm_amd: SEV enabled (ASIDs 32 - 1006)
+[ 16.178093] kvm_amd: SEV-ES enabled (ASIDs 1 - 31)
+[ 16.178095] kvm_amd: SEV-SNP enabled (ASIDs 1 - 31)
 
 ### Kernel
 
@@ -38,7 +39,7 @@ Update Qemu to the latest available version. Qemu 10.1.3 was verified to work.
 
 ## KDS
 
-AMD has KDS service to access ARK, ASK, its CRLs and VCEK certificate.  Please
+AMD has KDS service to access ARK, ASK, its CRLs and VCEK certificate. Please
 refer to [3] for the details. AMD doesn't provide an analogue to Intels PCCS
 service and even HTTP responses explicitly contain 'Cache-Control: no-cache'
 header to prevent caching. [3] requires clients to honor HTTP Error Code 429
@@ -61,7 +62,6 @@ addition to extensions which pass nonce and report there is one more that
 presents the machine VCEK certificate. This allows to avoid download of
 machine's VCEK certificate from KDS while establishing TLS handshake. The
 different set of OIDs is used to distinguish AMD vs Intel TEE.
-
 
 ## Links
 

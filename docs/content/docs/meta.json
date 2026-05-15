@@ -1,6 +1,6 @@
 {
   "pages": [
-    "welcome.md",
+    "welcome.mdx",
     "--- Overview ---",
     "developers.mdx",
     "gpu-owners.mdx",
@@ -8,13 +8,13 @@
     "downloads.mdx",
     "--- Technical Docs ---",
     "overview.mdx",
-    "architecture.md",
+    "architecture.mdx",
     "tdx-and-images.mdx",
-    "amd-tee.md",
-    "ra-tls.md",
+    "amd-tee.mdx",
+    "ra-tls.mdx",
     "seal-keys.mdx",
-    "smart-contracts.md",
-    "gpu.md",
-    "deployment.md"
+    "smart-contracts.mdx",
+    "gpu.mdx",
+    "deployment.mdx"
   ]
 }

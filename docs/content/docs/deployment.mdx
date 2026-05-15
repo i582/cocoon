@@ -21,6 +21,7 @@ First you should enable TEE and prepare the GPU for confidential computing. For 
 One straightforward way to prepare your hardware is to use the [canonical guide](https://github.com/canonical/tdx), but it could be too specific for general use.
 
 **Verify TDX on host:**
+
 ```bash
 # Check TDX support in kernel messages
 dmesg | grep -i tdx
@@ -29,6 +30,7 @@ dmesg | grep -i tdx
 ```
 
 **Setup GPU:**
+
 - Use [`scripts/setup-gpu-vfio`](https://github.com/TelegramMessenger/cocoon/blob/master/scripts/setup-gpu-vfio) to configure GPU for passthrough
 
 ## Quick Start
@@ -45,10 +47,11 @@ cd cocoon
 `cocoon-launch` will automatically initialize CMake and build the necessary binaries on the first run. It uses the `build/` directory by default.
 
 ```bash
-./scripts/cocoon-launch --build-dir <path> --just-build 
+./scripts/cocoon-launch --build-dir <path> --just-build
 ```
 
 **Manual build:**
+
 ```bash
 mkdir build && cd build
 cmake -GNinja \
@@ -70,7 +73,7 @@ Models are built separately and verified with dm-verity (see [Model Validation](
 # Build model (downloads, creates tar + verity)
 ./scripts/build-model Qwen/Qwen3-0.6B
 
-# Generates files: 
+# Generates files:
 # - images/Qwen_Qwen3_0_6B.tar
 # - images/Qwen_Qwen3_0_6B.verity
 # - images/Qwen_Qwen3_0_6B.hash
@@ -95,7 +98,7 @@ cd benchmark
 ./run-benchmark.sh -c 2 -n 10
 ```
 
-Runs locally with fake-TON. Benchmark tests network/protocol layer, not AI inference. 
+Runs locally with fake-TON. Benchmark tests network/protocol layer, not AI inference.
 But if you want, you may use actual inference server instead of fake HTTP one which is started by ./run-benchmark.sh
 
 ## Use Case 2: Test Images with Fake-TON
@@ -148,7 +151,9 @@ Also, the VM allows SSH on ports 12005 and 11005, and the disk is encrypted with
 
 Without --fake-ton, real TON will be used.
 
-What you need for a start is a TON config with reliable list of liteservers. You should put this file in spec/mainnet-full-ton-config.json. Pass it via --ton-config <path> to cocoon-launch.
+What you need for a start is a TON config with reliable list of liteservers. You
+should put this file in `spec/mainnet-full-ton-config.json`. Pass it via
+`--ton-config <path>` to `cocoon-launch`.
 
 You may want to create your own root smart contract for testing purposes. If you use --test options, TDX hashes will not be checked for convenience, so most important part of root contract will be proxy addresses (something like `127.0.0.1:11001 127.0.0.1:11002`), it is addresses to which worker and client will connect. For details see [smart-contracts repo](https://github.com/TelegramMessenger/cocoon-contracts)
 
@@ -163,6 +168,7 @@ You will have to put some TONs on worker, client and proxy accounts. See their H
 Simply use `./cocoon-launch`. It is better to call it from downloaded archive, so we won't have to rebuild everything.
 
 With production deployment you will also have to run seal-server:
+
 ```bash
 ./seal-server --enclave-path enclave.so
 ```
@@ -178,18 +184,21 @@ Apart from that it is mostly like test deployment. Only now you won't have acces
 ### HTTP Stats
 
 HTTP stats are available on the following ports:
+
 - Port 10000 for client
 - Port 11000 for proxy
 - Port 12000 for worker
 
-For instances, add (instance * 10) to the port number.
+For instances, add (instance \* 10) to the port number.
 
 **Available endpoints:**
+
 - `/stats` — Human-readable statistics of the runner
 - `/jsonstats` — JSON-formatted statistics
 - `/perf` — Current performance stats of the runner
 
 **Examples:**
+
 ```bash
 # Worker instance 0
 curl http://localhost:12000/stats
@@ -216,25 +225,25 @@ curl http://localhost:12010/stats
 
 **Available Commands:**
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `status [service]` | Overall health and service status | `./health-client -i worker status` |
-| `sys` | System metrics (CPU, memory, disk, network) | `./health-client -i worker sys` |
-| `svc <service>` | Detailed service info with recent logs | `./health-client -i worker svc cocoon-vllm` |
-| `logs <service> [lines]` | Service logs (default: 100 lines) | `./health-client -i worker logs cocoon-vllm 200` |
-| `tdx` | TDX attestation status (image hash + RTMRs) | `./health-client -i worker tdx` |
-| `gpu` | GPU metrics (utilization, memory, temp, power) | `./health-client -i worker gpu` |
-| `all` | All metrics in one view | `./health-client -i worker all` |
+| Command                  | Description                                    | Example                                          |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------ |
+| `status [service]`       | Overall health and service status              | `./health-client -i worker status`               |
+| `sys`                    | System metrics (CPU, memory, disk, network)    | `./health-client -i worker sys`                  |
+| `svc <service>`          | Detailed service info with recent logs         | `./health-client -i worker svc cocoon-vllm`      |
+| `logs <service> [lines]` | Service logs (default: 100 lines)              | `./health-client -i worker logs cocoon-vllm 200` |
+| `tdx`                    | TDX attestation status (image hash + RTMRs)    | `./health-client -i worker tdx`                  |
+| `gpu`                    | GPU metrics (utilization, memory, temp, power) | `./health-client -i worker gpu`                  |
+| `all`                    | All metrics in one view                        | `./health-client -i worker all`                  |
 
 **Instance Types:**
 
-| Type | Short | CID Pattern | Description |
-|------|-------|-------------|-------------|
-| `worker` | `w` | 6, 16, 26, ... | Worker instances |
-| `proxy` | `p` | 7, 17, 27, ... | Proxy instances |
-| `client` | `c` | 4, 14, 24, ... | Client instances |
+| Type     | Short | CID Pattern    | Description      |
+| -------- | ----- | -------------- | ---------------- |
+| `worker` | `w`   | 6, 16, 26, ... | Worker instances |
+| `proxy`  | `p`   | 7, 17, 27, ... | Proxy instances  |
+| `client` | `c`   | 4, 14, 24, ... | Client instances |
 
-CID = instance number * 10 + base CID (6 for worker, 7 for proxy, 4 for client)
+CID = instance number \* 10 + base CID (6 for worker, 7 for proxy, 4 for client)
 
 **Monitored Services:**
 
@@ -284,6 +293,6 @@ CID = instance number * 10 + base CID (6 for worker, 7 for proxy, 4 for client)
 ./health-client --cid 16 gpu
 ```
 
-- For TDX details: [TDX and Images](tdx-and-images.md)
-- For RA-TLS: [RA-TLS](ra-tls.md)
-- For GPU setup: [GPU](gpu.md)
+- For TDX details: [TDX and Images](tdx-and-images.mdx)
+- For RA-TLS: [RA-TLS](ra-tls.mdx)
+- For GPU setup: [GPU](gpu.mdx)
