@@ -559,13 +559,16 @@ def run_client_local(cfg: Config):
 
     # Start router (SOCKS5 only, no reverse proxy) with colored output
     router = f'{cfg.build_dir}/tee/router'
-    router_proc = popen([router, '-S', '8116@tee', '--serialize-info'],
+    router_policy = os.environ.get('COCOON_ROUTER_POLICY', 'tee')
+    router_proc = popen([router, '-S', f'8116@{router_policy}', '--serialize-info'],
                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
     router_thread = threading.Thread(target=stream_output, args=(router_proc, 'ROUTER', '36'), daemon=True)
     router_thread.start()
 
     # Run client with colored output
-    client_cmd = [f'{cfg.build_dir}/client-runner', '--config', f'{cfg.local_run_dir}/client-config.json', '-v3']
+    client_verbosity = os.environ.get('COCOON_CLIENT_VERBOSITY', '3')
+    client_cmd = [f'{cfg.build_dir}/client-runner', '--config', f'{cfg.local_run_dir}/client-config.json',
+                  f'-v{client_verbosity}']
     if cfg.fake_ton:
         client_cmd += ['--disable-ton', f'{cfg.local_run_dir}/fake-ton-config.json']
 
@@ -695,11 +698,37 @@ def run_qemu(cfg: Config):
 def ensure_build(build_dir: Path, targets: list[str]):
     """Ensure build directory exists and targets are built"""
     script_dir = Path(__file__).parent.parent
+    build_dir.mkdir(parents=True, exist_ok=True)
+
+    if shutil.which('ccache') and not os.environ.get('CCACHE_DIR'):
+        ccache_dir = build_dir / '.ccache'
+        ccache_dir.mkdir(parents=True, exist_ok=True)
+        os.environ['CCACHE_DIR'] = str(ccache_dir.resolve())
+
+    autoreconf = shutil.which('autoreconf')
+    perl = shutil.which('perl')
+    if autoreconf and perl:
+        tools_dir = build_dir / '.tools'
+        tools_dir.mkdir(parents=True, exist_ok=True)
+        autoreconf_wrapper = tools_dir / 'autoreconf'
+        autoreconf_wrapper.write_text(f'#!/usr/bin/env sh\nexec "{perl}" "{autoreconf}" "$@"\n')
+        autoreconf_wrapper.chmod(0o755)
+        for tool_name, env_name in (
+            ('autom4te', 'AUTOM4TE'),
+            ('autoconf', 'AUTOCONF'),
+            ('autoheader', 'AUTOHEADER'),
+        ):
+            tool = shutil.which(tool_name)
+            if tool:
+                wrapper = tools_dir / tool_name
+                wrapper.write_text(f'#!/usr/bin/env sh\nexec "{perl}" "{tool}" "$@"\n')
+                wrapper.chmod(0o755)
+                os.environ[env_name] = str(wrapper.resolve())
+        os.environ['PATH'] = f'{tools_dir.resolve()}{os.pathsep}{os.environ["PATH"]}'
 
     # Initialize CMake if needed
-    if not (build_dir / 'CMakeCache.txt').exists():
+    if not (build_dir / 'CMakeCache.txt').exists() or not (build_dir / 'build.ninja').exists():
         print(f'Initializing CMake in {build_dir}...')
-        build_dir.mkdir(parents=True, exist_ok=True)
         run(['cmake',
              '-GNinja',
              '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
